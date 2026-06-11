@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>B-Roll Filming Checklist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --cream:     #f5f0d3;
+      --navy:      #0a0f2c;
+      --orange:    #f56000;
+      --navy-70:   rgba(10,15,44,0.70);
+      --navy-14:   rgba(10,15,44,0.14);
+      --navy-06:   rgba(10,15,44,0.06);
+      --orange-12: rgba(245,96,0,0.12);
+      --green:     #1a6e47;
+      --green-bg:  #e2f2ea;
+      --r:         10px;
+      --rs:        6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      letter-spacing: -0.01em;
+      background: var(--cream);
+      color: var(--navy);
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .hdr {
+      background: var(--navy);
+      padding: 28px 24px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .hdr-inner { max-width: 680px; margin: 0 auto; }
+
+    .eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 7px;
+    }
+
+    h1 {
+      font-family: 'Times New Roman', Times, serif;
+      letter-spacing: -0.01em;
+      font-size: clamp(24px, 5vw, 32px);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.1;
+    }
+    h1 em { color: var(--orange); font-style: normal; }
+
+    .bar-wrap {
+      margin-top: 18px;
+      background: rgba(255,255,255,0.10);
+      border-radius: 99px;
+      height: 3px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: var(--orange);
+      border-radius: 99px;
+      width: 0%;
+      transition: width 0.35s ease;
+    }
+    .bar-lbl {
+      margin-top: 8px;
+      font-size: 12px;
+      color: rgba(245,240,211,0.45);
+      letter-spacing: -0.01em;
+    }
+    .bar-lbl strong { color: var(--cream); font-weight: 500; }
+
+    /* Wrap */
+    .wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 16px 0;
+    }
+
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .stat {
+      background: #fff;
+      border: 1px solid var(--navy-14);
+      border-radius: var(--r);
+      padding: 14px 16px;
+    }
+    .stat-lbl {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--navy-70);
+      margin-bottom: 4px;
+    }
+    .stat-val {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--navy);
+    }
+    .stat.hi .stat-val { color: var(--orange); }
+
+    /* Reset */
+    .reset-btn {
+      font-family: 'Inter', sans-serif;
+      letter-spacing: -0.01em;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--navy-70);
+      background: none;
+      border: 1px solid var(--navy-14);
+      border-radius: var(--rs);
+      padding: 7px 14px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      transition: background 0.15s;
+    }
+    .reset-btn:hover { background: var(--navy-06); }
+
+    /* Section card */
+    .sec {
+      margin-bottom: 10px;
+      background: #fff;
+      border: 1px solid var(--navy-14);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+
+    .sec-bar { height: 2px; background: var(--navy-06); }
+    .sec-bar-fill {
+      height: 100%;
+      background: var(--orange);
+      transition: width 0.3s ease;
+    }
+
+    .sec-hdr {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 16px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.1s;
+    }
+    .sec-hdr:hover { background: var(--navy-06); }
+
+    .sec-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--navy);
+      flex: 1;
+    }
+    .sec-count { font-size: 12px; color: var(--navy-70); margin-right: 2px; }
+
+    .chev {
+      font-size: 13px;
+      color: var(--navy-70);
+      transition: transform 0.2s;
+      line-height: 1;
+    }
+    .chev.open { transform: rotate(180deg); }
+
+    /* Clips */
+    .clips { display: none; }
+    .clips.open { display: block; }
+
+    .clip {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 16px;
+      border-top: 1px solid var(--navy-06);
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .clip:hover { background: var(--orange-12); }
+    .clip.done { background: var(--navy-06); }
+
+    .cb {
+      width: 17px;
+      height: 17px;
+      border: 1.5px solid var(--navy-14);
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      background: #fff;
+    }
+    .cb.on { background: var(--orange); border-color: var(--orange); }
+    .cb.on::after {
+      content: '';
+      width: 9px;
+      height: 6px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translate(1px, -1px);
+      display: block;
+    }
+
+    .clip-body {}
+    .clip-text {
+      font-size: 13.5px;
+      color: var(--navy);
+      line-height: 1.45;
+      letter-spacing: -0.01em;
+    }
+    .clip.done .clip-text {
+      color: rgba(10,15,44,0.30);
+      text-decoration: line-through;
+    }
+    .clip-tip {
+      font-size: 11.5px;
+      color: var(--navy-70);
+      margin-top: 2px;
+      letter-spacing: -0.005em;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 99px;
+      margin-left: 7px;
+      vertical-align: middle;
+      position: relative;
+      top: -1px;
+    }
+    .t-p { background: var(--orange-12); color: var(--orange); }
+    .t-e { background: var(--green-bg); color: var(--green); }
+
+    /* Footer */
+    .footer {
+      max-width: 680px;
+      margin: 36px auto 0;
+      padding: 36px 16px 52px;
+      border-top: 1px solid var(--navy-14);
+      text-align: center;
+    }
+    .footer-eyebrow {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--navy-70);
+      margin-bottom: 10px;
+    }
+    .footer-heading {
+      font-family: 'Times New Roman', Times, serif;
+      letter-spacing: -0.01em;
+      font-size: clamp(20px, 4vw, 27px);
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 22px;
+      line-height: 1.2;
+    }
+    .wa-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--navy);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      letter-spacing: -0.01em;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 13px 28px;
+      border-radius: var(--r);
+      text-decoration: none;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .wa-btn:hover { background: var(--orange); transform: translateY(-1px); }
+    .wa-icon {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+    .footer-note {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--navy-70);
+      opacity: 0.45;
+    }
+
+    /* Chevron svg */
+    .chev-svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--navy-70);
+      stroke-width: 2;
+      fill: none;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .chev-svg.open { transform: rotate(180deg); }
+  </style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <div class="eyebrow">Content Production</div>
+    <h1>B-Roll <em>Filming</em> Checklist</h1>
+    <div class="bar-wrap"><div class="bar-fill" id="bar"></div></div>
+    <div class="bar-lbl" id="bar-lbl">Loading...</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="stats">
+    <div class="stat"><div class="stat-lbl">Total clips</div><div class="stat-val" id="tot">0</div></div>
+    <div class="stat hi"><div class="stat-lbl">Recorded</div><div class="stat-val" id="don">0</div></div>
+    <div class="stat"><div class="stat-lbl">Remaining</div><div class="stat-val" id="lft">0</div></div>
+  </div>
+
+  <button class="reset-btn" onclick="resetAll()">Reset all</button>
+
+  <div id="container"></div>
+</main>
+
+<footer class="footer">
+  <div class="footer-eyebrow">Need help with your content?</div>
+  <div class="footer-heading">Let's build your personal brand together.</div>
+  <a class="wa-btn" href="https://wa.me/923233446329" target="_blank" rel="noopener">
+    <svg class="wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    Connect with me
+  </a>
+  <div class="footer-note">Opens WhatsApp</div>
+</footer>
+
+<script>
+const sections = [
+  {
+    id: "morning", title: "Morning / in bed",
+    clips: [
+      { text: "Eyes opening slowly, close-up", tip: "Strong opener for motivational content", tag: "p" },
+      { text: "Writing in a notebook on bed", tag: "e" },
+      { text: "Scrolling on phone while lying down", tip: "Shoot from the side" },
+      { text: "Morning coffee resting on bedsheet", tag: "e" },
+    ]
+  },
+  {
+    id: "desk", title: "At a desk",
+    clips: [
+      { text: "Typing on laptop, close-up on hands", tag: "p" },
+      { text: "Typing on laptop, wide shot" },
+      { text: "Taking notes while looking at screen" },
+      { text: "Leaning back, thinking, hand on chin", tip: "Good for voiceover overlay" },
+    ]
+  },
+  {
+    id: "outdoor", title: "Outdoors / balcony",
+    clips: [
+      { text: "Drinking coffee while looking out", tag: "p", tip: "Golden hour light is unbeatable here" },
+      { text: "Laptop open near trees or greenery", tag: "p" },
+      { text: "Writing in notebook outdoors", tag: "e" },
+      { text: "Leaning on railing, contemplating", tip: "Works well with quote overlays" },
+      { text: "Looking up at trees or sky, face close-up", tip: "Great mood and texture shot" },
+    ]
+  },
+  {
+    id: "movement", title: "Walking / movement",
+    clips: [
+      { text: "Walking confidently toward camera", tag: "p", tip: "Slow it down in edit" },
+      { text: "Walking away from camera, wide shot" },
+      { text: "Running, tracking shot from the front", tag: "p" },
+      { text: "Close-up on feet hitting the ground while running" },
+    ]
+  },
+  {
+    id: "car", title: "In or around the car",
+    clips: [
+      { text: "Getting out of the car, low angle", tag: "p" },
+      { text: "Looking out the car window, side profile", tip: "Great for transitions" },
+      { text: "On a phone call, parked, side angle" },
+    ]
+  },
+  {
+    id: "universal", title: "Universal close-ups",
+    clips: [
+      { text: "Looking directly into the camera, serious expression", tag: "p", tip: "Use for hooks and intros" },
+      { text: "Smiling or laughing naturally, candid", tag: "p" },
+      { text: "Hands writing, extreme close-up", tag: "p" },
+      { text: "Drinking coffee, mug to lips close-up", tag: "e" },
+      { text: "Reacting to phone, smile or nod", tag: "e" },
+      { text: "Putting on jacket or getting ready", tip: "Great for day-in-the-life content" },
+    ]
+  }
+];
+
+const state = {};
+let total = 0;
+
+function save() { try { localStorage.setItem('broll2', JSON.stringify(state)); } catch(e){} }
+function load() { try { const s = localStorage.getItem('broll2'); if(s) Object.assign(state, JSON.parse(s)); } catch(e){} }
+
+function updateStats() {
+  const done = Object.values(state).filter(Boolean).length;
+  document.getElementById('tot').textContent = total;
+  document.getElementById('don').textContent = done;
+  document.getElementById('lft').textContent = total - done;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('bar').style.width = pct + '%';
+  document.getElementById('bar-lbl').innerHTML =
+    `<strong>${pct}% complete</strong> &nbsp; ${done} of ${total} clips recorded`;
+}
+
+function updateSecBar(secEl) {
+  const all = secEl.querySelectorAll('.clip').length;
+  const done = secEl.querySelectorAll('.clip.done').length;
+  secEl.querySelector('.sec-bar-fill').style.width = (done/all*100) + '%';
+  secEl.querySelector('.sec-count').textContent = done + '/' + all;
+}
+
+function toggleClip(key, el) {
+  state[key] = !state[key];
+  const clipEl = el.closest('.clip');
+  clipEl.querySelector('.cb').classList.toggle('on', state[key]);
+  clipEl.classList.toggle('done', state[key]);
+  updateSecBar(clipEl.closest('.sec'));
+  updateStats();
+  save();
+}
+
+function toggleSec(id) {
+  document.getElementById('cl-' + id).classList.toggle('open');
+  document.getElementById('cv-' + id).classList.toggle('open');
+}
+
+function resetAll() {
+  if (!confirm('Reset all progress?')) return;
+  Object.keys(state).forEach(k => state[k] = false);
+  document.querySelectorAll('.cb').forEach(el => el.classList.remove('on'));
+  document.querySelectorAll('.clip').forEach(el => el.classList.remove('done'));
+  document.querySelectorAll('.sec').forEach(el => updateSecBar(el));
+  updateStats(); save();
+}
+
+function render() {
+  load();
+  const c = document.getElementById('container');
+  const tagHtml = { p: '<span class="tag t-p">must-have</span>', e: '<span class="tag t-e">easy win</span>' };
+
+  sections.forEach(sec => {
+    total += sec.clips.length;
+    const initDone = sec.clips.filter((_, i) => state[sec.id + '_' + i]).length;
+
+    const clipsHtml = sec.clips.map((cl, i) => {
+      const key = sec.id + '_' + i;
+      const done = state[key] ? ' done' : '';
+      const checked = state[key] ? ' on' : '';
+      return `<div class="clip${done}" onclick="toggleClip('${key}', this)">
+        <div class="cb${checked}"></div>
+        <div class="clip-body">
+          <div class="clip-text">${cl.text}${cl.tag ? tagHtml[cl.tag] : ''}</div>
+          ${cl.tip ? `<div class="clip-tip">${cl.tip}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    const div = document.createElement('div');
+    div.className = 'sec';
+    div.innerHTML = `
+      <div class="sec-bar"><div class="sec-bar-fill" style="width:${initDone/sec.clips.length*100}%"></div></div>
+      <div class="sec-hdr" onclick="toggleSec('${sec.id}')">
+        <span class="sec-title">${sec.title}</span>
+        <span class="sec-count">${initDone}/${sec.clips.length}</span>
+        <svg class="chev-svg" id="cv-${sec.id}" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="clips" id="cl-${sec.id}">${clipsHtml}</div>`;
+    c.appendChild(div);
+  });
+
+  updateStats();
+}
+
+render();
+</script>
+</body>
+</html>
